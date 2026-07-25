@@ -18,3 +18,5 @@ export default function Landing() {
     </div>
   );
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
