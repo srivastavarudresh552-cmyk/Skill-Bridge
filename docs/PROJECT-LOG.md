@@ -39,3 +39,12 @@
 - Verified in-browser: signup → auto-redirect to Dashboard → logout → protected-route redirect to `/login` → login → back to Dashboard. All working.
 
 **Status at end of Day 4**: Authentication feature fully implemented and verified end-to-end (backend + frontend + protected routing). Ready to build the Create Roadmap feature (Day 5).
+
+## Day 5 — Core Feature: AI Roadmap Generation
+- Built resume upload (`multer`), PDF text extraction (`pdf-parse`), and full Gemini integration (`geminiService.js`) with structured JSON output, retry-on-invalid-JSON, and error handling.
+- Diagnosed and fixed a Gemini model deprecation (`gemini-2.5-flash` → `gemini-3.1-flash-lite`) mid-build.
+- Built full roadmap CRUD API (create/list/get/updateProgress/delete) with ownership checks — verified via Postman against real MongoDB documents.
+- Built frontend Create Roadmap form, Dashboard roadmap list with live progress bars, and Roadmap Detail page with interactive step checklist.
+- Verified the complete end-to-end loop in-browser: upload resume → real AI analysis → view roadmap → track progress → see it reflected on the dashboard.
+
+**Status at end of Day 5**: Core feature (AI-powered skill-gap roadmap generation + progress tracking) fully implemented, tested with real data, and working end-to-end alongside Day 4's authentication. **Deployed to production** on Render (backend Web Service + frontend Static Site, both free tier) — fixed a deploy-only bug (stray `node` package in dependencies breaking `pdf-parse`) and verified the complete signup-to-roadmap flow live.

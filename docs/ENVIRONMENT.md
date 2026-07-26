@@ -44,7 +44,8 @@
 - **Access**: Network Access configured to allow the developer's IP (or `0.0.0.0/0` for development convenience)
 - **Collections**: `users`, `roadmaps` (see `SCHEMA.md`)
 
-## Hosting (planned, not yet deployed)
-- Frontend: Render Static Site
-- Backend: Render Web Service
-- Both use the same env variables above, set via the Render dashboard instead of a local `.env` file.
+## Hosting (LIVE as of Day 5)
+- **Backend**: Render Web Service, root directory `server`, build `npm install`, start `npm start`. Free tier — spins down after inactivity, first request after idle takes ~30-60s.
+- **Frontend**: Render Static Site, root directory `client`, build `npm install && npm run build`, publish directory `dist`.
+- **Production env vars set directly in Render dashboard** (not from a committed file): backend has `MONGO_URI`, `JWT_SECRET`, `GEMINI_API_KEY`, `NODE_ENV=production`, `CLIENT_URL` (set to the live frontend URL); frontend has `VITE_API_URL` (set to the live backend URL + `/api`).
+- **Known deploy fix**: `server/package.json` had accidentally accumulated a `node` npm package under `dependencies` (from a stray `npm install node`), which broke `pdf-parse`'s module resolution on Render's clean install. Fixed by removing it and reinstalling clean — see `PROJECT-LOG.md` Day 5 entry.
