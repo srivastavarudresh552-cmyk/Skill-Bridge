@@ -5,8 +5,8 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
-// import CreateRoadmap from './pages/CreateRoadmap';
-// import RoadmapDetail from './pages/RoadmapDetail';
+import CreateRoadmap from './pages/CreateRoadmap';
+import RoadmapDetail from './pages/RoadmapDetail';
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           path="/roadmaps/new"
           element={
             <ProtectedRoute>
-              {/* <CreateRoadmap /> */}
+              <CreateRoadmap />
             </ProtectedRoute>
           }
         />
@@ -36,7 +36,7 @@ function App() {
           path="/roadmaps/:id"
           element={
             <ProtectedRoute>
-              {/* <RoadmapDetail /> */}
+              <RoadmapDetail />
             </ProtectedRoute>
           }
         />
