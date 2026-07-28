@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Spinner from '../components/ui/Spinner';
+import ErrorBanner from '../components/ui/ErrorBanner';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login, authError } = useAuth();
   const navigate = useNavigate();
@@ -18,45 +21,66 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-indigo-600 mb-6">Welcome back</h1>
+    <div className="flex min-h-[calc(100vh-73px)] items-center justify-center px-4 py-12">
+      <div className="w-full max-w-sm animate-fade-in-up">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
+          <p className="mt-1 text-sm text-gray-500">Log in to see your roadmaps</p>
+        </div>
 
-        {authError && (
-          <p className="bg-red-50 text-red-600 text-sm p-2 rounded mb-4">{authError}</p>
-        )}
+        <form onSubmit={handleSubmit} className="card p-7">
+          <ErrorBanner>{authError}</ErrorBanner>
 
-        <label className="block text-sm text-gray-600 mb-1">Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+            className="input-field mb-4"
+          />
 
-        <label className="block text-sm text-gray-600 mb-1">Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full border rounded px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
+          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <div className="relative mb-6">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              placeholder="••••••••"
+              className="input-field pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-xs font-medium text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {loading ? 'Logging in...' : 'Log In'}
-        </button>
+          <button type="submit" disabled={loading} className="btn-primary w-full">
+            {loading ? <Spinner size="sm" className="border-white/40 border-t-white" /> : 'Log In'}
+          </button>
 
-        <p className="text-sm text-gray-500 mt-4 text-center">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-indigo-600 font-medium">Sign up</Link>
-        </p>
-      </form>
+          <p className="mt-5 text-center text-sm text-gray-500">
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-medium text-brand-600 hover:text-brand-700">
+              Sign up
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
