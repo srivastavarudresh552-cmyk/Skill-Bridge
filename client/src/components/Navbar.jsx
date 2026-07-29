@@ -11,6 +11,7 @@ export default function Navbar() {
     `text-sm font-medium transition-colors ${
       location.pathname === path ? 'text-brand-600' : 'text-gray-600 hover:text-gray-900'
     }`;
+  const isActive = (path) => (location.pathname === path ? 'page' : undefined);
 
   return (
     <nav className="sticky top-0 z-20 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
@@ -22,11 +23,12 @@ export default function Navbar() {
           <span className="text-lg font-bold text-gray-900">SkillBridge</span>
         </Link>
 
-        {/* Desktop nav */}
         <div className="hidden items-center gap-6 sm:flex">
           {user ? (
             <>
-              <Link to="/dashboard" className={linkClass('/dashboard')}>Dashboard</Link>
+              <Link to="/dashboard" aria-current={isActive('/dashboard')} className={linkClass('/dashboard')}>
+                Dashboard
+              </Link>
               <span className="text-sm text-gray-400">|</span>
               <span className="text-sm text-gray-500">Hi, {user.name.split(' ')[0]}</span>
               <button onClick={logout} className="btn-secondary !py-1.5 !px-3 text-sm">
@@ -35,7 +37,9 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className={linkClass('/login')}>Log In</Link>
+              <Link to="/login" aria-current={isActive('/login')} className={linkClass('/login')}>
+                Log In
+              </Link>
               <Link to="/signup" className="btn-primary !py-1.5 !px-3.5 text-sm">
                 Sign Up
               </Link>
@@ -43,7 +47,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile menu button */}
         <button
           onClick={() => setMenuOpen((v) => !v)}
           className="sm:hidden rounded-md p-2 text-gray-500 hover:bg-gray-100"
@@ -60,12 +63,11 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu panel */}
       {menuOpen && (
         <div className="border-t border-gray-100 bg-white px-5 py-3 sm:hidden animate-fade-in-up">
           {user ? (
             <div className="flex flex-col gap-3">
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)} className={linkClass('/dashboard')}>
+              <Link to="/dashboard" aria-current={isActive('/dashboard')} onClick={() => setMenuOpen(false)} className={linkClass('/dashboard')}>
                 Dashboard
               </Link>
               <span className="text-sm text-gray-500">Hi, {user.name.split(' ')[0]}</span>
@@ -73,7 +75,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              <Link to="/login" onClick={() => setMenuOpen(false)} className={linkClass('/login')}>
+              <Link to="/login" aria-current={isActive('/login')} onClick={() => setMenuOpen(false)} className={linkClass('/login')}>
                 Log In
               </Link>
               <Link to="/signup" onClick={() => setMenuOpen(false)} className="btn-primary w-full">

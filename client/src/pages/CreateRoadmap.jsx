@@ -1,23 +1,38 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { createRoadmap } from '../services/roadmapApi';
+import FileDropzone from '../components/ui/FileDropzone';
+import AnalyzingLoader from '../components/ui/AnalyzingLoader';
+import ErrorBanner from '../components/ui/ErrorBanner';
+
+const MIN_JD_LENGTH = 50;
 
 export default function CreateRoadmap() {
   const [targetRole, setTargetRole] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [resumeFile, setResumeFile] = useState(null);
+  const [fileError, setFileError] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type !== 'application/pdf') {
-      setError('Please upload a PDF file');
+  const handleFileSelect = (file) => {
+    if (!file) {
+      setResumeFile(null);
+      setFileError('');
+      return;
+    }
+    if (file.type !== 'application/pdf') {
+      setFileError('Please upload a PDF file');
       setResumeFile(null);
       return;
     }
-    setError('');
+    if (file.size > 5 * 1024 * 1024) {
+      setFileError('File must be under 5MB');
+      setResumeFile(null);
+      return;
+    }
+    setFileError('');
     setResumeFile(file);
   };
 
@@ -29,8 +44,8 @@ export default function CreateRoadmap() {
       setError('Please upload your resume as a PDF');
       return;
     }
-    if (jobDescription.trim().length < 50) {
-      setError('Job description must be at least 50 characters');
+    if (jobDescription.trim().length < MIN_JD_LENGTH) {
+      setError(`Job description must be at least ${MIN_JD_LENGTH} characters`);
       return;
     }
 
@@ -45,61 +60,67 @@ export default function CreateRoadmap() {
       navigate(`/roadmaps/${roadmap._id}`);
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Something went wrong. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Create a New Roadmap</h1>
+  const jdCount = jobDescription.trim().length;
 
-        {error && (
-          <p className="bg-red-50 text-red-600 text-sm p-3 rounded mb-4">{error}</p>
-        )}
+  return (
+    <div className="mx-auto max-w-xl px-5 py-10">
+      <Link to="/dashboard" className="mb-4 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800">
+        ← Back to Dashboard
+      </Link>
+
+      <div className="card animate-fade-in-up p-7">
+        <h1 className="mb-1 text-xl font-bold text-gray-900">Create a New Roadmap</h1>
+        <p className="mb-6 text-sm text-gray-500">
+          We'll compare your resume against this role and build you a personalized learning plan.
+        </p>
 
         {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin h-10 w-10 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-            <p className="text-gray-600">Analyzing your resume against the job description...</p>
-            <p className="text-gray-400 text-sm mt-1">This can take up to 15-20 seconds.</p>
-          </div>
+          <AnalyzingLoader />
         ) : (
           <form onSubmit={handleSubmit}>
-            <label className="block text-sm text-gray-600 mb-1">Target Role</label>
+            <ErrorBanner>{error}</ErrorBanner>
+
+            <label htmlFor="targetRole" className="mb-1.5 block text-sm font-medium text-gray-700">
+              Target Role
+            </label>
             <input
+              id="targetRole"
               type="text"
               value={targetRole}
               onChange={(e) => setTargetRole(e.target.value)}
               required
               placeholder="e.g. Frontend Developer"
-              className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="input-field mb-4"
             />
 
-            <label className="block text-sm text-gray-600 mb-1">Job Description</label>
+            <div className="mb-1.5 flex items-center justify-between">
+              <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-700">
+                Job Description
+              </label>
+              <span className={`text-xs ${jdCount < MIN_JD_LENGTH ? 'text-gray-400' : 'text-success-600'}`}>
+                {jdCount}/{MIN_JD_LENGTH}+
+              </span>
+            </div>
             <textarea
+              id="jobDescription"
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               required
               rows={6}
-              placeholder="Paste the job posting text here (min 50 characters)"
-              className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              placeholder="Paste the job posting text here..."
+              className="input-field mb-4 resize-none"
             />
 
-            <label className="block text-sm text-gray-600 mb-1">Resume (PDF only)</label>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={handleFileChange}
-              required
-              className="w-full border rounded px-3 py-2 mb-6"
-            />
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Resume</label>
+            <div className="mb-6">
+              <FileDropzone file={resumeFile} onFileSelect={handleFileSelect} error={fileError} />
+            </div>
 
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
-            >
+            <button type="submit" className="btn-primary w-full">
               Generate Roadmap
             </button>
           </form>
