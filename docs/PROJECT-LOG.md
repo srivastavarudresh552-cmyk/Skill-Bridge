@@ -48,3 +48,18 @@
 - Verified the complete end-to-end loop in-browser: upload resume → real AI analysis → view roadmap → track progress → see it reflected on the dashboard.
 
 **Status at end of Day 5**: Core feature (AI-powered skill-gap roadmap generation + progress tracking) fully implemented, tested with real data, and working end-to-end alongside Day 4's authentication. **Deployed to production** on Render (backend Web Service + frontend Static Site, both free tier) — fixed a deploy-only bug (stray `node` package in dependencies breaking `pdf-parse`) and verified the complete signup-to-roadmap flow live.
+
+## Day 6 — Complete the MVP & Deliver a Working Demo
+- Added the required footer ("Built with Claude as part of the AB Talks 60-Day Claude AI Challenge"), verified visible on the live deployed site.
+- Fixed a production-only SPA routing bug: direct navigation to client-side routes returned "Not Found" on Render — resolved with a `/*` → `/index.html` rewrite rule.
+- Ran a full regression pass on the **live production site**: signup, logout, protected-route redirect, login, second roadmap creation, progress persistence, roadmap deletion, and footer visibility across all pages — all passed.
+
+**Status at end of Day 6**: Working MVP fully deployed and verified live — every core feature (auth, AI roadmap generation, progress tracking, roadmap management) functions together correctly in production. Demo-ready.
+
+## Day 7 — Product Refinement & User Experience
+- Built a shared design system: Tailwind v4 theme tokens, Inter font, and reusable UI primitives (Spinner, Badge, EmptyState, ErrorBanner, Skeleton, FileDropzone, AnalyzingLoader, ProgressRing).
+- Redesigned every screen: Navbar (responsive/sticky), Footer, Landing (real hero + how-it-works), Login/Signup (password toggle + strength meter), Dashboard (skeletons, empty state, richer cards), Create Roadmap (drag-and-drop dropzone, char counter, rotating loading messages), Roadmap Detail (progress ring, priority badges, per-step save state).
+- Senior review pass: added a 404 page, skip-to-content link, `prefers-reduced-motion` support, and fixed a mobile header layout issue.
+- Ran full regression on the live production site after deploying — every feature confirmed working with the new UI.
+
+**Status at end of Day 7**: MVP is now a polished, portfolio-worthy application — accessible, responsive, and fully verified live in production.

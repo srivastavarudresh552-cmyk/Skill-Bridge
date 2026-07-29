@@ -6,12 +6,16 @@ Skill-Bridge/
 │   ├── public/
 │   ├── src/
 │   │   ├── assets/              # images, icons (not yet populated)
-│   │   ├── components/          # Navbar.jsx built; Button/SkillTag/ProgressBar land here Day 4+
-│   │   ├── context/              # AuthContext.jsx (JWT/user state scaffold)
-│   │   ├── pages/                # Landing.jsx (live "Hello World"), Login/Signup/Dashboard/
-│   │   │                         # CreateRoadmap/RoadmapDetail (placeholder stubs, built Day 4+)
-│   │   ├── services/              # api.js — shared Axios instance with JWT interceptor
-│   │   ├── App.jsx                # routing (React Router)
+│   │   ├── components/          # Navbar.jsx, ProtectedRoute.jsx (Day 4); Footer.jsx (Day 6);
+│   │   │                         # ui/ — Spinner, Badge, EmptyState, ErrorBanner, Skeleton, FileDropzone,
+│   │   │                         # AnalyzingLoader, ProgressRing — shared design system primitives (Day 7)
+│   │   ├── context/              # AuthContext.jsx — real signup/login/logout (built, Day 4)
+│   │   ├── pages/                # Landing.jsx, Login.jsx, Signup.jsx, Dashboard.jsx (built, Day 4);
+│   │   │                         # CreateRoadmap.jsx, RoadmapDetail.jsx — full upload + AI flow + progress tracking (built, Day 5);
+│   │   │                         # NotFound.jsx — 404 catch-all route (Day 7); all pages redesigned Day 7
+│   │   ├── utils/                # formatDate.js — relative time formatting (Day 7)
+│   │   ├── services/              # api.js (Axios + JWT interceptor), roadmapApi.js (built, Day 5)
+│   │   ├── App.jsx                # routing (React Router), all roadmap routes protected
 │   │   └── main.jsx                # entry point — wraps App in BrowserRouter + AuthProvider
 │   ├── .env                       # not committed — VITE_API_URL
 │   ├── index.html
@@ -21,13 +25,15 @@ Skill-Bridge/
 ├── server/                      # Express backend
 │   ├── src/
 │   │   ├── config/               # db.js — Mongoose connection (built, working)
-│   │   ├── controllers/          # empty — authController.js, roadmapController.js land here Day 4+
-│   │   ├── middleware/           # authMiddleware.js — JWT verify scaffold (built, not yet wired to routes)
-│   │   ├── models/                # User.js, Roadmap.js — full Mongoose schemas (built, matches SCHEMA.md)
-│   │   ├── routes/                # empty — authRoutes.js, roadmapRoutes.js land here Day 4+
-│   │   ├── services/              # geminiService.js — Gemini client initialized (built);
-│   │   │                         # resumeParser.js lands here Day 4+
-│   │   └── app.js                 # Express app setup — CORS, JSON, morgan, /api/health route (built, working)
+│   │   ├── controllers/          # authController.js (Day 4); roadmapController.js — create/list/get/
+│   │   │                         # updateProgress/delete, all verified against real Gemini calls (Day 5)
+│   │   ├── middleware/           # authMiddleware.js (JWT verify, wired to routes, Day 4);
+│   │   │                         # upload.js — multer PDF upload config (Day 5)
+│   │   ├── models/                # User.js, Roadmap.js — full Mongoose schemas (matches SCHEMA.md)
+│   │   ├── routes/                # authRoutes.js (Day 4); roadmapRoutes.js (Day 5)
+│   │   ├── services/              # geminiService.js — full prompt construction + JSON parsing + retry,
+│   │   │                         # using gemini-3.1-flash-lite (free tier); resumeParser.js — pdf-parse wrapper (Day 5)
+│   │   └── app.js                 # Express app setup — CORS, JSON, morgan, /api/health, auth + roadmap routes mounted
 │   ├── server.js                  # entry point — connects DB, then starts listening (built, working)
 │   ├── .env                       # not committed — local secrets
 │   ├── .env.example               # committed — placeholder values for onboarding
