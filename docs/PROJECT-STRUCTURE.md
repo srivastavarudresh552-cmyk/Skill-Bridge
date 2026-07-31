@@ -3,17 +3,18 @@
 ```
 Skill-Bridge/
 ├── client/                      # React (Vite) frontend
-│   ├── public/
+│   ├── public/                   # favicon.svg — custom "SB" branding (Day 9, replaces default Vite icon)
 │   ├── src/
 │   │   ├── assets/              # images, icons (not yet populated)
 │   │   ├── components/          # Navbar.jsx, ProtectedRoute.jsx (Day 4); Footer.jsx (Day 6);
 │   │   │                         # ui/ — Spinner, Badge, EmptyState, ErrorBanner, Skeleton, FileDropzone,
 │   │   │                         # AnalyzingLoader, ProgressRing — shared design system primitives (Day 7)
-│   │   ├── context/              # AuthContext.jsx — real signup/login/logout (built, Day 4)
+│   │   ├── context/              # AuthContext.jsx — real sigAnup/login/logout (built, Day 4)
 │   │   ├── pages/                # Landing.jsx, Login.jsx, Signup.jsx, Dashboard.jsx (built, Day 4);
 │   │   │                         # CreateRoadmap.jsx, RoadmapDetail.jsx — full upload + AI flow + progress tracking (built, Day 5);
 │   │   │                         # NotFound.jsx — 404 catch-all route (Day 7); all pages redesigned Day 7;
-│   │   │                         # OfflineBanner.jsx, SessionExpiredModal.jsx (Day 8);
+│   │   │                         # OfflineBanner.jsx, SessionExpiredModal.jsx (Day 8); ErrorBoundary.jsx — catches
+│   │   │                         # uncaught runtime errors app-wide, shows recoverable fallback (Day 9);
 │   │   │                         # ui/PasswordInput.jsx — shared password toggle, replaces Login/Signup duplication (Day 8)
 │   │   ├── utils/                # formatDate.js — relative time formatting (Day 7)
 │   │   ├── hooks/                 # useOnlineStatus.js (Day 8)
@@ -56,7 +57,8 @@ Skill-Bridge/
 │   └── DAY3-SUMMARY.md           # added Day 3
 │
 ├── .gitignore
-└── README.md
+├── LICENSE                       # MIT (added Day 9)
+└── README.md                     # rewritten Day 9 — live link, tech stack, setup, docs index
 ```
 
 **AI provider note**: switched from Anthropic Claude (PRD original) to Google Gemini on Day 3 — approved change, reflected everywhere above and in `ARCHITECTURE.md`/`API.md`.
