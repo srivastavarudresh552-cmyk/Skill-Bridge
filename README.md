@@ -19,21 +19,21 @@ SkillBridge is an AI-powered web app that compares your resume against a target 
 ### Landing Page
 The homepage where users can upload their resume and target job description to generate an AI-powered learning roadmap.
 
-![Landing Page](./docs/images/landing-page.png)
+![Landing Page](./docs/images/landing-page1.png)
 
 ---
 
 ### Dashboard
 The dashboard displays all generated roadmaps, their completion progress, and allows users to create new learning plans.
 
-![Dashboard](./docs/images/dashboard.png)
+![Dashboard](./docs/images/dashboard1.png)
 
 ---
 
 ### Roadmap Details
 Detailed roadmap view showing matched skills, identified skill gaps, prioritized learning recommendations, and interactive progress tracking.
 
-![Roadmap Details](./docs/images/roadmap-details.png)
+![Roadmap Details](./docs/images/roadmap-details1.png)
 ## Features
 
 - **AI-powered skill-gap analysis** — upload a resume (PDF) and a target job description; Gemini compares them and returns matched skills, prioritized gap skills, and a step-by-step roadmap.
