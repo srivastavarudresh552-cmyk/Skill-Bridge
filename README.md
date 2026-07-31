@@ -10,6 +10,8 @@
 SkillBridge is an AI-powered web app that compares your resume against a target job description, identifies exactly which skills you're missing, and generates a personalized, trackable learning roadmap to close that gap.
 
 🔗 **Live app**: https://skill-bridge-frontend-1l8i.onrender.com
+
+
 📂 **Repo**: https://github.com/srivastavarudresh552-cmyk/Skill-Bridge
 
 ---
