@@ -44,42 +44,39 @@ const cleanJsonResponse = (rawText) => {
   return cleaned;
 };
 
+const isRateLimitError = (err) => {
+  const status = err.status || err.statusCode || (err.response && err.response.status);
+  return status === 429 || /rate.?limit|quota/i.test(err.message || '');
+};
+
 const generateRoadmap = async (resumeText, targetRole, jobDescription) => {
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
   const prompt = buildPrompt(resumeText, targetRole, jobDescription);
 
-  const attempt = async (extraInstruction = "") => {
+  const attempt = async (extraInstruction = '') => {
     const result = await model.generateContent(prompt + extraInstruction);
-
     const rawText = result.response.text();
-
-    console.log("========== RAW GEMINI RESPONSE ==========");
-    console.log(rawText);
-    console.log("=========================================");
-
     const cleaned = cleanJsonResponse(rawText);
-
     return JSON.parse(cleaned);
   };
 
   try {
     return await attempt();
   } catch (firstError) {
-    console.error("First attempt failed:");
-    console.error(firstError);
-
+    if (isRateLimitError(firstError)) {
+      throw new Error('AI_RATE_LIMITED');
+    }
     try {
       return await attempt(
-        "\n\nIMPORTANT: Return ONLY valid JSON. No markdown. No explanation."
+        '\n\nIMPORTANT: Your previous response was not valid JSON. Return ONLY the raw JSON object, nothing else.'
       );
     } catch (secondError) {
-      console.error("Second attempt failed:");
-      console.error(secondError);
-
-      throw secondError;
+      if (isRateLimitError(secondError)) {
+        throw new Error('AI_RATE_LIMITED');
+      }
+      throw new Error('AI_RESPONSE_INVALID');
     }
   }
 };
-
 
 module.exports = { generateRoadmap };

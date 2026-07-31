@@ -59,7 +59,12 @@ export default function CreateRoadmap() {
       const roadmap = await createRoadmap(formData);
       navigate(`/roadmaps/${roadmap._id}`);
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Something went wrong. Please try again.');
+      const status = err.response?.status;
+      if (status === 429) {
+        setError('The AI service is busy right now. Please wait a minute and try again.');
+      } else {
+        setError(err.response?.data?.error?.message || 'Something went wrong. Please try again.');
+      }
       setLoading(false);
     }
   };

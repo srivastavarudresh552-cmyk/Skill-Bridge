@@ -9,10 +9,26 @@ export default function FileDropzone({ file, onFileSelect, error }) {
     if (selected) onFileSelect(selected);
   };
 
+  const openPicker = () => inputRef.current?.click();
+
+  const handleRemove = (e) => {
+    e.stopPropagation();
+    onFileSelect(null);
+    if (inputRef.current) inputRef.current.value = '';
+  };
+
   return (
     <div>
       <div
-        onClick={() => inputRef.current?.click()}
+        role="button"
+        tabIndex={0}
+        onClick={openPicker}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openPicker();
+          }
+        }}
         onDragOver={(e) => {
           e.preventDefault();
           setDragging(true);
@@ -42,10 +58,7 @@ export default function FileDropzone({ file, onFileSelect, error }) {
             <span className="max-w-[200px] truncate">{file.name}</span>
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onFileSelect(null);
-              }}
+              onClick={handleRemove}
               className="ml-1 text-gray-400 hover:text-danger-600"
               aria-label="Remove file"
             >

@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from 'react';
-import api from '../services/api';
+import { createContext, useContext, useEffect, useState } from 'react';
+import api, { registerSessionExpiredHandler } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -10,6 +10,21 @@ export function AuthProvider({ children }) {
   });
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [authError, setAuthError] = useState('');
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  const clearSession = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
+  };
+
+  useEffect(() => {
+    registerSessionExpiredHandler(() => {
+      clearSession();
+      setSessionExpired(true);
+    });
+  }, []);
 
   const signup = async (name, email, password) => {
     setAuthError('');
@@ -34,6 +49,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('user', JSON.stringify(res.data.user));
       setToken(res.data.token);
       setUser(res.data.user);
+      setSessionExpired(false);
       return true;
     } catch (err) {
       setAuthError(err.response?.data?.error?.message || 'Login failed');
@@ -42,16 +58,16 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setToken(null);
-    setUser(null);
+    clearSession();
   };
 
-  const value = { user, token, authError, signup, login, logout };
+  const dismissSessionExpired = () => setSessionExpired(false);
+
+  const value = { user, token, authError, signup, login, logout, sessionExpired, dismissSessionExpired };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);

@@ -1,14 +1,16 @@
-import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
-import CreateRoadmap from "./pages/CreateRoadmap";
-import RoadmapDetail from "./pages/RoadmapDetail";
-import NotFound from "./pages/NotFound";
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
+import OfflineBanner from './components/OfflineBanner';
+import SessionExpiredModal from './components/SessionExpiredModal';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import CreateRoadmap from './pages/CreateRoadmap';
+import RoadmapDetail from './pages/RoadmapDetail';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
       >
         Skip to main content
       </a>
+      <OfflineBanner />
       <Navbar />
       <div id="main-content" className="flex-1">
         <Routes>
@@ -53,6 +56,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
+      <SessionExpiredModal />
     </div>
   );
 }

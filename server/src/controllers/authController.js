@@ -6,21 +6,27 @@ const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
+const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
+
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || name.trim().length < 2) {
-      return res.status(400).json({ error: { code: 'INVALID_NAME', message: 'Name must be at least 2 characters' } });
+    if (!isNonEmptyString(name) || !isNonEmptyString(email) || !isNonEmptyString(password)) {
+      return res.status(400).json({ error: { code: 'INVALID_INPUT', message: 'Name, email, and password must all be provided as text' } });
     }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (name.trim().length < 2 || name.trim().length > 50) {
+      return res.status(400).json({ error: { code: 'INVALID_NAME', message: 'Name must be 2-50 characters' } });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: { code: 'INVALID_EMAIL', message: 'A valid email is required' } });
     }
-    if (!password || password.length < 8) {
+    if (password.length < 8) {
       return res.status(400).json({ error: { code: 'INVALID_PASSWORD', message: 'Password must be at least 8 characters' } });
     }
 
-    const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(409).json({ error: { code: 'EMAIL_TAKEN', message: 'An account with this email already exists' } });
     }
@@ -30,7 +36,7 @@ const signup = async (req, res) => {
 
     const user = await User.create({
       name: name.trim(),
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
       passwordHash,
     });
 
@@ -50,11 +56,12 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (!isNonEmptyString(email) || !isNonEmptyString(password)) {
       return res.status(400).json({ error: { code: 'MISSING_FIELDS', message: 'Email and password are required' } });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(401).json({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } });
     }

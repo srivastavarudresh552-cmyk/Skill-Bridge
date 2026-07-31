@@ -3,11 +3,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Spinner from '../components/ui/Spinner';
 import ErrorBanner from '../components/ui/ErrorBanner';
+import PasswordInput from '../components/ui/PasswordInput';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login, authError } = useAuth();
   const navigate = useNavigate();
@@ -48,25 +48,14 @@ export default function Login() {
           <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700">
             Password
           </label>
-          <div className="relative mb-6">
-            <input
+          <div className="mb-6">
+            <PasswordInput
               id="password"
-              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               autoComplete="current-password"
               placeholder="••••••••"
-              className="input-field pr-10"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-xs font-medium text-gray-400 hover:text-gray-600"
-              tabIndex={-1}
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
           </div>
 
           <button type="submit" disabled={loading} className="btn-primary w-full">
