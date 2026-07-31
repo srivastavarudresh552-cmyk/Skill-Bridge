@@ -3,7 +3,13 @@
 Base URL (local): `http://localhost:5000/api`
 Base URL (prod): `https://<render-backend-url>/api`
 
-No implementation yet — this is the contract for Day 3+ build.
+Implemented Days 4-5; hardened Day 8 (rate limiting, strict input validation, ObjectId checks, `resumeText` no longer returned in any response).
+
+**Day 8 additions**:
+- `POST /api/auth/signup` and `POST /api/auth/login` are now rate-limited: 10 requests per 15 minutes per IP → `429 TOO_MANY_REQUESTS` beyond that.
+- `POST /api/roadmaps` can now return `429 AI_RATE_LIMITED` if Gemini's free-tier rate limit is hit (distinct from other AI failures).
+- All roadmap endpoints now validate the `:id` param is a real MongoDB ObjectId before querying, returning a clean `404` instead of a `500` for malformed IDs.
+- `resumeText` is never included in any API response (create/get), even though it's still stored server-side for potential future use.
 
 ---
 
@@ -58,7 +64,7 @@ No implementation yet — this is the contract for Day 3+ build.
   - `400` — missing file, wrong file type, missing text fields
   - `401` — not authenticated
   - `422` — PDF could not be parsed (corrupt/scanned image PDF)
-  - `502` — Claude API call failed or returned invalid structure after retry
+  - `502` — Gemini API call failed or returned invalid structure after retry
 
 ### `GET /api/roadmaps`
 - **Purpose**: List all roadmaps belonging to the logged-in user (Dashboard view).

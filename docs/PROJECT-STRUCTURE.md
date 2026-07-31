@@ -12,10 +12,13 @@ Skill-Bridge/
 │   │   ├── context/              # AuthContext.jsx — real signup/login/logout (built, Day 4)
 │   │   ├── pages/                # Landing.jsx, Login.jsx, Signup.jsx, Dashboard.jsx (built, Day 4);
 │   │   │                         # CreateRoadmap.jsx, RoadmapDetail.jsx — full upload + AI flow + progress tracking (built, Day 5);
-│   │   │                         # NotFound.jsx — 404 catch-all route (Day 7); all pages redesigned Day 7
+│   │   │                         # NotFound.jsx — 404 catch-all route (Day 7); all pages redesigned Day 7;
+│   │   │                         # OfflineBanner.jsx, SessionExpiredModal.jsx (Day 8);
+│   │   │                         # ui/PasswordInput.jsx — shared password toggle, replaces Login/Signup duplication (Day 8)
 │   │   ├── utils/                # formatDate.js — relative time formatting (Day 7)
-│   │   ├── services/              # api.js (Axios + JWT interceptor), roadmapApi.js (built, Day 5)
-│   │   ├── App.jsx                # routing (React Router), all roadmap routes protected
+│   │   ├── hooks/                 # useOnlineStatus.js (Day 8)
+│   │   ├── services/              # api.js — Axios + JWT interceptor + session-expiry detection (hardened Day 8), roadmapApi.js (Day 5)
+│   │   ├── App.jsx                # routing (React Router), all roadmap routes protected, offline/session-expiry UI (Day 8)
 │   │   └── main.jsx                # entry point — wraps App in BrowserRouter + AuthProvider
 │   ├── .env                       # not committed — VITE_API_URL
 │   ├── index.html
@@ -25,10 +28,12 @@ Skill-Bridge/
 ├── server/                      # Express backend
 │   ├── src/
 │   │   ├── config/               # db.js — Mongoose connection (built, working)
-│   │   ├── controllers/          # authController.js (Day 4); roadmapController.js — create/list/get/
-│   │   │                         # updateProgress/delete, all verified against real Gemini calls (Day 5)
+│   │   ├── controllers/          # authController.js (Day 4, hardened Day 8 — strict type validation);
+│   │   │                         # roadmapController.js — create/list/get/updateProgress/delete (Day 5,
+│   │   │                         # hardened Day 8 — ObjectId validation, resumeText no longer exposed in responses)
 │   │   ├── middleware/           # authMiddleware.js (JWT verify, wired to routes, Day 4);
-│   │   │                         # upload.js — multer PDF upload config (Day 5)
+│   │   │                         # upload.js — multer PDF upload config (Day 5);
+│   │   │                         # rateLimiter.js — 10 req/15min on auth routes (Day 8)
 │   │   ├── models/                # User.js, Roadmap.js — full Mongoose schemas (matches SCHEMA.md)
 │   │   ├── routes/                # authRoutes.js (Day 4); roadmapRoutes.js (Day 5)
 │   │   ├── services/              # geminiService.js — full prompt construction + JSON parsing + retry,

@@ -1,7 +1,8 @@
 {
-  "name": "client",
+  "name": "skillbridge-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "SkillBridge frontend — AI-powered resume-to-roadmap skill gap analysis (React + Vite).",
   "type": "module",
   "scripts": {
     "dev": "vite",

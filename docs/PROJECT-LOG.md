@@ -63,3 +63,11 @@
 - Ran full regression on the live production site after deploying — every feature confirmed working with the new UI.
 
 **Status at end of Day 7**: MVP is now a polished, portfolio-worthy application — accessible, responsive, and fully verified live in production.
+
+## Day 8 — Testing, Debugging & Production Optimization
+- Conducted a full senior QA/security/performance review; fixed every issue found across backend and frontend.
+- Backend hardening: rate limiting on auth routes, `helmet` security headers, strict input type validation, ObjectId validation (no more 500s on bad IDs), `resumeText` no longer exposed in API responses (and capped in storage), Gemini 429 detection, process-level crash safety nets.
+- Frontend resilience: session-expiry modal + auto-logout on 401, offline banner, keyboard-accessible file dropzone, fixed a file re-selection bug, error feedback on failed progress toggles, deduplicated password-toggle logic into a shared component.
+- Full end-to-end walkthrough re-verified on the live production site after deploying all fixes.
+
+**Status at end of Day 8**: Application reviewed and hardened to production-readiness standards — stable, secure, and verified end-to-end live. Approved for public launch.
